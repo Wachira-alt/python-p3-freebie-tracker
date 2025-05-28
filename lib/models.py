@@ -18,9 +18,9 @@ class Company(Base):
     name = Column(String())
     founding_year = Column(Integer())
 
-    devs = association_proxy('freebies', 'dev')
 
-    freebies = relationship("Freebie", backref="company")
+
+    freebies = relationship("Freebie", back_populates="company")
     devs = association_proxy("freebies", "dev")
 
     def give_freebie(self, dev, item_name, value):
@@ -41,7 +41,7 @@ class Dev(Base):
     id = Column(Integer(), primary_key=True)
     name= Column(String())
 
-    freebies = relationship("Freebie", backref="dev")
+    freebies = relationship("Freebie", back_populates="dev")
     companies = association_proxy('freebies', 'company')
 
     def received_one(self, item_name):
@@ -66,8 +66,8 @@ class Freebie(Base):
     company_id = Column(Integer(), ForeignKey('companies.id'))
     dev_id = Column(Integer(), ForeignKey('devs.id'))
 
-    company = relationship("Company", backref="freebies")
-    dev = relationship("Dev", backref="freebies")
+    company = relationship("Company", back_populates="freebies")
+    dev = relationship("Dev", back_populates="freebies")
 
     
     def print_details(self):
