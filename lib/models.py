@@ -20,6 +20,17 @@ class Company(Base):
 
     devs = association_proxy('freebies', 'dev')
 
+    freebies = relationship("Freebie", backref="company")
+    devs = association_proxy("freebies", "dev")
+
+    def give_freebie(self, dev, item_name, value):
+        from models import Freebie
+        return Freebie(item_name=item_name, value=value, company=self, dev=dev)
+
+    @classmethod
+    def oldest_company(cls, session):
+        return session.query(cls).order_by(cls.founding_year).first()
+
 
     def __repr__(self):
         return f'<Company {self.name}>'
@@ -30,7 +41,17 @@ class Dev(Base):
     id = Column(Integer(), primary_key=True)
     name= Column(String())
 
+    freebies = relationship("Freebie", backref="dev")
     companies = association_proxy('freebies', 'company')
+
+    def received_one(self, item_name):
+        return any(freebie.item_name == item_name for freebie in self.freebies)
+
+    def give_away(self, other_dev, freebie):
+        if freebie in self.freebies:
+            freebie.dev = other_dev
+            return True
+        return False
 
 
     def __repr__(self):
