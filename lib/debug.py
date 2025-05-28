@@ -53,29 +53,29 @@ def test_relationships():
     print("Company2 Freebies:", company2.freebies)
     freebie1.print_details()
 
-    # TEST Company.give_freebie()
-    new_freebie = company1.give_freebie(dev2, "Laptop Sticker", 30)
-    session.add(new_freebie)
-    session.commit()
-    print(f"New Freebie: {new_freebie}")
-    new_freebie.print_details()
+    # # TEST Company.give_freebie()
+    # new_freebie = company1.give_freebie(dev2, "Laptop Sticker", 30)
+    # session.add(new_freebie)
+    # session.commit()
+    # print(f"New Freebie: {new_freebie}")
+    # new_freebie.print_details()
 
-    #  TEST Dev.received_one()
-    print("Did Bob receive a T-Shirt?", dev2.received_one("T-Shirt"))   # True
-    print("Did Alice receive a Laptop Sticker?", dev1.received_one("Laptop Sticker"))  # False
+    # #  TEST Dev.received_one()
+    # print("Did Bob receive a T-Shirt?", dev2.received_one("T-Shirt"))   # True
+    # print("Did Alice receive a Laptop Sticker?", dev1.received_one("Laptop Sticker"))  # False
 
-    #  TEST Dev.give_away()
-    print("Before giving away:", dev1.freebies)
-    success = dev1.give_away(dev2, freebie1)
-    session.commit()
-    print("Give away successful?", success)
-    print("After giving away:")
-    print("Alice:", dev1.freebies)
-    print("Bob:", dev2.freebies)
+    # #  TEST Dev.give_away()
+    # print("Before giving away:", dev1.freebies)
+    # success = dev1.give_away(dev2, freebie1)
+    # session.commit()
+    # print("Give away successful?", success)
+    # print("After giving away:")
+    # print("Alice:", dev1.freebies)
+    # print("Bob:", dev2.freebies)
 
-    #  TEST Company.oldest_company()
-    oldest = Company.oldest_company(session)
-    print("Oldest Company:", oldest)
+    # #  TEST Company.oldest_company()
+    # oldest = Company.oldest_company(session)
+    # print("Oldest Company:", oldest)
 
 
 if __name__ == "__main__":
