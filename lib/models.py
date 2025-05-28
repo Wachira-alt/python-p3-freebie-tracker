@@ -37,3 +37,13 @@ class Freebie(Base):
     company_id = Column(Integer(), ForeignKey('companies.id'))
     dev_id = Column(Integer(), ForeignKey('devs.id'))
 
+    company = relationship("Company", backref="freebies")
+    dev = relationship("Dev", backref="freebies")
+
+    
+    def print_details(self):
+        print(f"Freebie: {self.item_name}, Value: {self.value}, Given by: {self.company.name}, Received by: {self.dev.name}")
+
+    def __repr__(self):
+        return f'<Freebie {self.item_name}>'
+
