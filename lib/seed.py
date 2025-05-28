@@ -5,32 +5,41 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from models import Base, Company, Dev, Freebie
 
+# Create engine and session
 engine = create_engine('sqlite:///freebies.db')
 Base.metadata.create_all(engine)
 session = Session(bind=engine)
 
-# Clear existing data (optional, but useful during development)
+# Clear existing data (in proper order due to FK constraints)
 session.query(Freebie).delete()
-session.query(Company).delete()
 session.query(Dev).delete()
+session.query(Company).delete()
 session.commit()
 
-# Create Companies
-company1 = Company(name="TechCorp", founding_year=1999)
-company2 = Company(name="InnoSoft", founding_year=2005)
+# ----------------------------
+# 1. Create Companies
+# ----------------------------
+techcorp = Company(name="TechCorp", founding_year=1999)
+innosoft = Company(name="InnoSoft", founding_year=2005)
 
-# Create Devs
-dev1 = Dev(name="Alice")
-dev2 = Dev(name="Bob")
+# ----------------------------
+# 2. Create Devs
+# ----------------------------
+alice = Dev(name="Alice")
+bob = Dev(name="Bob")
 
-session.add_all([company1, company2, dev1, dev2])
+# ----------------------------
+# 3. Create Freebies via Object Relationships
+# ----------------------------
+freebie1 = Freebie(item_name="Cool Sticker", value=10, company=techcorp, dev=alice)
+freebie2 = Freebie(item_name="T-Shirt", value=20, company=innosoft, dev=bob)
+freebie3 = Freebie(item_name="Keychain", value=5, company=techcorp, dev=bob)  # extra for better tests
+
+# ----------------------------
+# 4. Add All and Commit
+# ----------------------------
+session.add_all([techcorp, innosoft, alice, bob, freebie1, freebie2, freebie3])
 session.commit()
 
-# Create Freebies
-freebie1 = Freebie(item_name="Cool Sticker", value=10, company_id=company1.id, dev_id=dev1.id)
-freebie2 = Freebie(item_name="T-Shirt", value=20, company_id=company2.id, dev_id=dev2.id)
+print("✅ Seed data added successfully.")
 
-session.add_all([freebie1, freebie2])
-session.commit()
-
-print("Seed data added successfully.")
